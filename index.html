@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨ Premium BMI Tracker & Health Dashboard 🏃‍♂️</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- CSS stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+
+    <div class="container">
+        <!-- Top Navigation / Header -->
+        <header>
+            <div class="header-logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <span class="sparkle">✨</span>
+                    <h1 id="app-title">BMI Tracker</h1>
+                    <span class="runner">🏃‍♂️</span>
+                </div>
+            </div>
+            
+            <p class="subtitle" id="app-subtitle">Calculate • Analyze • Improve • Your Health Journey</p>
+            
+            <div class="top-badge">
+                <span id="badge-text">Small steps today, healthier you tomorrow! 💪</span>
+            </div>
+
+            <button class="theme-toggle" id="theme-toggle-btn" aria-label="Toggle Theme">
+                <div class="toggle-track">
+                    <div class="toggle-thumb">
+                        <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="5"/>
+                            <line x1="12" y1="1" x2="12" y2="3"/>
+                            <line x1="12" y1="21" x2="12" y2="23"/>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                            <line x1="1" y1="12" x2="3" y2="12"/>
+                            <line x1="21" y1="12" x2="23" y2="12"/>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                        </svg>
+                        <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                        </svg>
+                    </div>
+                </div>
+            </button>
+        </header>
+
+        <!-- Main Dashboard Layout -->
+        <main class="dashboard-grid">
+            <!-- Left Card: Inputs -->
+            <section class="glass-card input-section">
+                <h2>
+                    <span class="icon">📅</span> 
+                    <span id="form-heading">Calculate Your BMI</span>
+                </h2>
+                <p class="section-desc">Enter your details below</p>
+
+                <form id="bmi-form" onsubmit="calculateBMI(event)">
+                    <!-- Height Input Group -->
+                    <div class="input-group">
+                        <label for="height-input">🚶‍♂️ Height</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="height-input" step="any" placeholder="170" required>
+                            <select id="height-unit" onchange="onHeightUnitChange()">
+                                <option value="cm">cm</option>
+                                <option value="m">m</option>
+                                <option value="ft">ft</option>
+                                <option value="in">in</option>
+                            </select>
+                        </div>
+                        <div class="unit-selector-pills">
+                            <button type="button" class="pill active" onclick="setHeightUnit('cm')">cm</button>
+                            <button type="button" class="pill" onclick="setHeightUnit('m')">m</button>
+                            <button type="button" class="pill" onclick="setHeightUnit('ft')">ft</button>
+                            <button type="button" class="pill" onclick="setHeightUnit('in')">in</button>
+                        </div>
+                    </div>
+
+                    <!-- Weight Input Group -->
+                    <div class="input-group">
+                        <label for="weight-input">⚖️ Weight</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="weight-input" step="any" placeholder="65" required>
+                            <select id="weight-unit" onchange="onWeightUnitChange()">
+                                <option value="kg">kg</option>
+                                <option value="lbs">lbs</option>
+                                <option value="st">st</option>
+                            </select>
+                        </div>
+                        <div class="unit-selector-pills">
+                            <button type="button" class="pill active" onclick="setWeightUnit('kg')">kg</button>
+                            <button type="button" class="pill" onclick="setWeightUnit('lbs')">lbs</button>
+                            <button type="button" class="pill" onclick="setWeightUnit('st')">st</button>
+                        </div>
+                    </div>
+
+                    <!-- Gender Selection -->
+                    <div class="input-group">
+                        <label>🧬 Gender <span class="optional">(Optional)</span></label>
+                        <div class="gender-selector">
+                            <input type="radio" id="gender-male" name="gender" value="male">
+                            <label for="gender-male" class="gender-btn">
+                                <svg class="gender-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <circle cx="10" cy="14" r="5"/>
+                                    <line x1="19" y1="5" x2="13.5" y2="10.5"/>
+                                    <polyline points="14 5 19 5 19 10"/>
+                                </svg>
+                                Male
+                            </label>
+
+                            <input type="radio" id="gender-female" name="gender" value="female">
+                            <label for="gender-female" class="gender-btn">
+                                <svg class="gender-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <circle cx="12" cy="9" r="4"/>
+                                    <line x1="12" y1="13" x2="12" y2="21"/>
+                                    <line x1="9" y1="18" x2="15" y2="18"/>
+                                </svg>
+                                Female
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Age Input -->
+                    <div class="input-group">
+                        <label for="age-input">📅 Age <span class="optional">(Optional)</span></label>
+                        <div class="input-wrapper">
+                            <input type="number" id="age-input" placeholder="22" min="1" max="120">
+                            <span class="input-suffix">years</span>
+                        </div>
+                    </div>
+
+                    <!-- Goal Dropdown -->
+                    <div class="input-group" id="goal-group">
+                        <label for="goal-select">🎯 Goal</label>
+                        <div class="input-wrapper">
+                            <select id="goal-select">
+                                <option value="general">General Health</option>
+                                <option value="loss">🔥 Weight Loss</option>
+                                <option value="gain">💪 Weight Gain</option>
+                                <option value="maintain">⚖️ Maintain Weight</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="calculate-btn">
+                        <span>🚀 Calculate BMI</span>
+                    </button>
+                </form>
+
+                <p class="private-note">Your data is not stored anywhere. 100% Private & Secure 🔒</p>
+            </section>
+
+            <!-- Right Card: Results -->
+            <section class="glass-card result-section">
+                <h2>
+                    <span class="icon">📊</span>
+                    <span>Your BMI Result</span>
+                </h2>
+                
+                <div class="result-display-wrapper">
+                    <!-- SVG Gauge -->
+                    <div class="gauge-container">
+                        <svg viewBox="0 0 300 180" class="gauge">
+                            <!-- Definitions for Gradients -->
+                            <defs>
+                                <linearGradient id="gauge-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stop-color="#3b82f6" />      <!-- Underweight: Blue -->
+                                    <stop offset="25%" stop-color="#10b981" />     <!-- Normal: Green -->
+                                    <stop offset="50%" stop-color="#f59e0b" />     <!-- Overweight: Yellow -->
+                                    <stop offset="75%" stop-color="#f97316" />     <!-- Obese: Orange -->
+                                    <stop offset="100%" stop-color="#ef4444" />    <!-- Severe Obese: Red -->
+                                </linearGradient>
+                            </defs>
+                            
+                            <!-- Main track arc -->
+                            <path d="M 40,150 A 110,110 0 0,1 260,150" fill="none" stroke="#e2e8f0" stroke-width="16" stroke-linecap="round" class="gauge-bg" />
+                            <path d="M 40,150 A 110,110 0 0,1 260,150" fill="none" stroke="url(#gauge-gradient)" stroke-width="16" stroke-linecap="round" class="gauge-track" />
+                            
+                            <!-- Gauge labels -->
+                            <text x="30" y="153" class="gauge-label-num">15</text>
+                            <text x="75" y="65" class="gauge-label-num">18.5</text>
+                            <text x="150" y="27" class="gauge-label-num">25</text>
+                            <text x="225" y="65" class="gauge-label-num">30</text>
+                            <text x="270" y="153" class="gauge-label-num">40+</text>
+
+                            <!-- Needle pointer -->
+                            <g class="gauge-needle-group" id="gauge-needle" style="transform: rotate(-90deg);">
+                                <path d="M 150,150 L 150,45" stroke="#1e293b" stroke-width="4" stroke-linecap="round" class="needle-line" />
+                                <circle cx="150" cy="150" r="10" fill="#1e293b" class="needle-center" />
+                                <circle cx="150" cy="150" r="4" fill="#ffffff" class="needle-center-inner" />
+                            </g>
+                        </svg>
+                        
+                        <div class="gauge-value-display">
+                            <span class="bmi-score" id="bmi-value-text">--</span>
+                            <div class="bmi-status-pill" id="bmi-status-container">
+                                <span id="bmi-status-text">No Data</span>
+                                <span class="status-heart" id="bmi-status-heart">📊</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback Banner -->
+                <div class="feedback-banner" id="feedback-banner">
+                    <p id="feedback-message">Enter your details and click Calculate BMI to see your results.</p>
+                </div>
+
+                <!-- Normal Range Box -->
+                <div class="normal-range-box">
+                    <p class="box-title">Your Normal BMI Range</p>
+                    <p class="box-value">18.5 – 24.9</p>
+                    <p class="box-subtext" id="ideal-weight-advisory">Enter your height to see your ideal normal weight range.</p>
+                </div>
+
+                <!-- Dashboard Action Buttons -->
+                <div class="action-buttons">
+                    <button class="action-btn save-btn" onclick="saveCurrentResult()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                            <polyline points="17 21 17 13 7 13 7 21"/>
+                            <polyline points="7 3 7 8 15 8"/>
+                        </svg>
+                        <span id="save-btn-label">Save Result</span>
+                    </button>
+                    <button class="action-btn reset-btn" onclick="resetForm()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+                        </svg>
+                        <span>Reset</span>
+                    </button>
+                    <button class="action-btn history-btn" onclick="toggleHistoryModal()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                        <span>History</span>
+                    </button>
+                </div>
+
+                <p class="footer-tip">💡 Tip: Track your progress regularly!</p>
+            </section>
+        </main>
+
+
+
+        <!-- Details & Guide Grid Section -->
+        <section class="details-section">
+            <div class="info-grid">
+                <!-- BMI Category Guide -->
+                <div class="glass-card info-card" id="category-guide-card">
+                    <h3>ℹ️ About BMI / Category Guide</h3>
+                    <p class="about-text">Body Mass Index (BMI) is a simple calculation using your height and weight. It helps to estimate body fat and categorize your weight status.</p>
+                    
+                    <!-- Horizontal category bar -->
+                    <div class="category-bar">
+                        <div class="category-segment segment-underweight" data-category="underweight">
+                            <span class="label">Underweight</span>
+                            <span class="range">&lt; 18.5</span>
+                        </div>
+                        <div class="category-segment segment-normal active" data-category="normal">
+                            <span class="label">Normal</span>
+                            <span class="range">18.5 – 24.9</span>
+                            <div class="category-indicator-arrow">▼</div>
+                        </div>
+                        <div class="category-segment segment-overweight" data-category="overweight">
+                            <span class="label">Overweight</span>
+                            <span class="range">25 – 29.9</span>
+                        </div>
+                        <div class="category-segment segment-obese" data-category="obese">
+                            <span class="label">Obese</span>
+                            <span class="range">30 – 39.9</span>
+                        </div>
+                        <div class="category-segment segment-severe" data-category="severe">
+                            <span class="label">Severe Obese</span>
+                            <span class="range">≥ 40</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Why It Matters & Reminder Column -->
+                <div class="reminder-column">
+                    <div class="glass-card info-card">
+                        <h3>💖 Why It Matters</h3>
+                        <ul class="check-list">
+                            <li><span>🧬</span> Body fat based on height & weight</li>
+                            <li><span>🩺</span> Risk of weight related diseases</li>
+                            <li><span>📈</span> Track progress towards your goal</li>
+                            <li><span>🌱</span> Build a healthier lifestyle</li>
+                        </ul>
+                    </div>
+
+                    <div class="glass-card reminder-card">
+                        <div class="reminder-header">
+                            <span class="sun-glow">☀️</span>
+                            <h4>Today's Reminder</h4>
+                        </div>
+                        <p class="reminder-text">You're not just building a better body, you're building a better future. Keep going, future engineer! 🚀</p>
+                        <div class="book-illustration">
+                            <span class="emoji">📚🎓</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Study & Wellness Balance -->
+                <div class="glass-card info-card">
+                    <h3>📚 Study & Wellness Balance</h3>
+                    <ul class="check-list balance-list">
+                        <li><span>📅</span> Plan your study schedule</li>
+                        <li><span>🧘</span> Take short breaks & stretch</li>
+                        <li><span>💧</span> Stay hydrated</li>
+                        <li><span>🥗</span> Eat healthy & balanced meals</li>
+                        <li><span>😴</span> Sleep 7-8 hours daily</li>
+                        <li><span>✨</span> Stay consistent & be patient</li>
+                    </ul>
+                    <div class="formula-box">
+                        <span>Success = Daily Habits × Consistency</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Health Tips Row -->
+            <div class="glass-card tips-row" id="health-tips-row">
+                <h3>Tips for a Healthy Life</h3>
+                <div class="tips-grid">
+                    <div class="tip-item">
+                        <div class="tip-icon">🍏</div>
+                        <div>
+                            <h5>Eat Balanced</h5>
+                            <p>Consume nutritious food in right amount.</p>
+                        </div>
+                    </div>
+                    <div class="tip-item">
+                        <div class="tip-icon">🏃‍♂️</div>
+                        <div>
+                            <h5>Stay Active</h5>
+                            <p>Exercise regularly and keep moving.</p>
+                        </div>
+                    </div>
+                    <div class="tip-item">
+                        <div class="tip-icon">💧</div>
+                        <div>
+                            <h5>Drink Water</h5>
+                            <p>Stay hydrated for better health.</p>
+                        </div>
+                    </div>
+                    <div class="tip-item">
+                        <div class="tip-icon">🌙</div>
+                        <div>
+                            <h5>Sleep Well</h5>
+                            <p>Get 7-8 hours of quality sleep.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Social Connect Footer -->
+        <section class="connect-section">
+            <h3>Let's Connect!</h3>
+            <p>Follow my journey & connect with me</p>
+            
+            <div class="social-grid">
+                <!-- GitHub -->
+                <a href="https://github.com/codewithipsita2005" target="_blank" class="social-card github-card" rel="noopener noreferrer">
+                    <div class="social-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                        </svg>
+                    </div>
+                    <div class="social-info">
+                        <span class="social-platform">GitHub</span>
+                        <span class="social-handle">@codewithipsita2005</span>
+                    </div>
+                </a>
+
+                <!-- LinkedIn -->
+                <a href="https://www.linkedin.com/in/ipsita-ghosh-11966b307?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" class="social-card linkedin-card" rel="noopener noreferrer">
+                    <div class="social-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                            <rect x="2" y="9" width="4" height="12"/>
+                            <circle cx="4" cy="4" r="2"/>
+                        </svg>
+                    </div>
+                    <div class="social-info">
+                        <span class="social-platform">LinkedIn</span>
+                        <span class="social-handle">/in/ipsita-ghosh-11966b307</span>
+                    </div>
+                </a>
+
+                <!-- Twitter / X -->
+                <a href="https://x.com/IpsitaG15917" target="_blank" class="social-card twitter-card" rel="noopener noreferrer">
+                    <div class="social-icon">
+                        <!-- Custom SVG for X logo -->
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        </svg>
+                    </div>
+                    <div class="social-info">
+                        <span class="social-platform">Twitter</span>
+                        <span class="social-handle">@IpsitaG15917</span>
+                    </div>
+                </a>
+
+                <!-- Gmail -->
+                <a href="mailto:ipsitaghosh2005@gmail.com" class="social-card gmail-card">
+                    <div class="social-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                            <polyline points="22,6 12,13 2,6"/>
+                        </svg>
+                    </div>
+                    <div class="social-info">
+                        <span class="social-platform">Gmail</span>
+                        <span class="social-handle">ipsitaghosh2005@gmail.com</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Page Footer Credits -->
+        <footer>
+            <div class="footer-credits">
+                <p class="credits-main">Made with <span class="heart-pulse">❤️</span> by <span class="author-name">Ipsita Ghosh</span></p>
+                <p class="credits-bio">B.Tech CSE Student | Aspiring Developer | Lifelong Learner</p>
+                <p class="credits-motto">Balancing Code, Calculus & Calories! 💻📚🥗</p>
+                <p class="credits-closing">Stay healthy, stay happy! ☀️</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- History Modal -->
+    <div class="modal-backdrop" id="history-modal">
+        <div class="modal-card glass-card">
+            <div class="modal-header">
+                <h3>📜 BMI Calculation History</h3>
+                <button class="close-modal-btn" onclick="toggleHistoryModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="history-list-empty" class="history-empty">
+                    <p>No records saved yet. Calculate your BMI and click "Save Result" to store history!</p>
+                </div>
+                <div class="history-table-wrapper" id="history-table-container" style="display: none;">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Height</th>
+                                <th>Weight</th>
+                                <th>BMI Score</th>
+                                <th>Category</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-table-body">
+                            <!-- Loaded dynamically via script -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="clear-history-btn" onclick="clearAllHistory()">Clear All History</button>
+                <button class="close-btn" onclick="toggleHistoryModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script file -->
+    <script src="script.js"></script>
+</body>
+</html>
